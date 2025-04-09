@@ -11,7 +11,7 @@
 # =============================================================================
 
 # =============================================================================
-# Project: mpointers
+# Project: MemoryManager
 # Configurations: Debug
 # =============================================================================
 
@@ -41,85 +41,73 @@ include CMakeFiles/rules.ninja
 
 cmake_ninja_workdir = C$:/Users/roarb/Documents/Projects/mpointers/cmake-build-debug/
 # =============================================================================
-# Object build statements for EXECUTABLE target mpointers
+# Object build statements for EXECUTABLE target memory_manager
 
 
 #############################################
-# Order-only phony target for mpointers
+# Order-only phony target for memory_manager
 
-build cmake_object_order_depends_target_mpointers: phony || .
+build cmake_object_order_depends_target_memory_manager: phony || .
 
-build CMakeFiles/mpointers.dir/main.cpp.obj: CXX_COMPILER__mpointers_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/main.cpp || cmake_object_order_depends_target_mpointers
-  DEP_FILE = CMakeFiles\mpointers.dir\main.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
-  OBJECT_DIR = CMakeFiles\mpointers.dir
-  OBJECT_FILE_DIR = CMakeFiles\mpointers.dir
+build CMakeFiles/memory_manager.dir/memory_manager/main.cpp.obj: CXX_COMPILER__memory_manager_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/memory_manager/main.cpp || cmake_object_order_depends_target_memory_manager
+  DEP_FILE = CMakeFiles\memory_manager.dir\memory_manager\main.cpp.obj.d
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/roarb/Documents/Projects/mpointers
+  OBJECT_DIR = CMakeFiles\memory_manager.dir
+  OBJECT_FILE_DIR = CMakeFiles\memory_manager.dir\memory_manager
 
-build CMakeFiles/mpointers.dir/protocol/message.cpp.obj: CXX_COMPILER__mpointers_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/protocol/message.cpp || cmake_object_order_depends_target_mpointers
-  DEP_FILE = CMakeFiles\mpointers.dir\protocol\message.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
-  OBJECT_DIR = CMakeFiles\mpointers.dir
-  OBJECT_FILE_DIR = CMakeFiles\mpointers.dir\protocol
+build CMakeFiles/memory_manager.dir/memory_manager/memory_manager.cpp.obj: CXX_COMPILER__memory_manager_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/memory_manager/memory_manager.cpp || cmake_object_order_depends_target_memory_manager
+  DEP_FILE = CMakeFiles\memory_manager.dir\memory_manager\memory_manager.cpp.obj.d
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/roarb/Documents/Projects/mpointers
+  OBJECT_DIR = CMakeFiles\memory_manager.dir
+  OBJECT_FILE_DIR = CMakeFiles\memory_manager.dir\memory_manager
 
-build CMakeFiles/mpointers.dir/memory_manager/main.cpp.obj: CXX_COMPILER__mpointers_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/memory_manager/main.cpp || cmake_object_order_depends_target_mpointers
-  DEP_FILE = CMakeFiles\mpointers.dir\memory_manager\main.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
-  OBJECT_DIR = CMakeFiles\mpointers.dir
-  OBJECT_FILE_DIR = CMakeFiles\mpointers.dir\memory_manager
+build CMakeFiles/memory_manager.dir/memory_manager/socket_server.cpp.obj: CXX_COMPILER__memory_manager_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/memory_manager/socket_server.cpp || cmake_object_order_depends_target_memory_manager
+  DEP_FILE = CMakeFiles\memory_manager.dir\memory_manager\socket_server.cpp.obj.d
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/roarb/Documents/Projects/mpointers
+  OBJECT_DIR = CMakeFiles\memory_manager.dir
+  OBJECT_FILE_DIR = CMakeFiles\memory_manager.dir\memory_manager
 
-build CMakeFiles/mpointers.dir/memory_manager/memory_manager.cpp.obj: CXX_COMPILER__mpointers_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/memory_manager/memory_manager.cpp || cmake_object_order_depends_target_mpointers
-  DEP_FILE = CMakeFiles\mpointers.dir\memory_manager\memory_manager.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
-  OBJECT_DIR = CMakeFiles\mpointers.dir
-  OBJECT_FILE_DIR = CMakeFiles\mpointers.dir\memory_manager
+build CMakeFiles/memory_manager.dir/memory_manager/garbage_collector.cpp.obj: CXX_COMPILER__memory_manager_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/memory_manager/garbage_collector.cpp || cmake_object_order_depends_target_memory_manager
+  DEP_FILE = CMakeFiles\memory_manager.dir\memory_manager\garbage_collector.cpp.obj.d
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/roarb/Documents/Projects/mpointers
+  OBJECT_DIR = CMakeFiles\memory_manager.dir
+  OBJECT_FILE_DIR = CMakeFiles\memory_manager.dir\memory_manager
 
-build CMakeFiles/mpointers.dir/memory_manager/garbage_collector.cpp.obj: CXX_COMPILER__mpointers_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/memory_manager/garbage_collector.cpp || cmake_object_order_depends_target_mpointers
-  DEP_FILE = CMakeFiles\mpointers.dir\memory_manager\garbage_collector.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
-  OBJECT_DIR = CMakeFiles\mpointers.dir
-  OBJECT_FILE_DIR = CMakeFiles\mpointers.dir\memory_manager
+build CMakeFiles/memory_manager.dir/protocol/message.cpp.obj: CXX_COMPILER__memory_manager_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/protocol/message.cpp || cmake_object_order_depends_target_memory_manager
+  DEP_FILE = CMakeFiles\memory_manager.dir\protocol\message.cpp.obj.d
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/roarb/Documents/Projects/mpointers
+  OBJECT_DIR = CMakeFiles\memory_manager.dir
+  OBJECT_FILE_DIR = CMakeFiles\memory_manager.dir\protocol
 
-build CMakeFiles/mpointers.dir/memory_manager/socket_server.cpp.obj: CXX_COMPILER__mpointers_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/memory_manager/socket_server.cpp || cmake_object_order_depends_target_mpointers
-  DEP_FILE = CMakeFiles\mpointers.dir\memory_manager\socket_server.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
-  OBJECT_DIR = CMakeFiles\mpointers.dir
-  OBJECT_FILE_DIR = CMakeFiles\mpointers.dir\memory_manager
-
-build CMakeFiles/mpointers.dir/mpointer/socket_client.cpp.obj: CXX_COMPILER__mpointers_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/mpointer/socket_client.cpp || cmake_object_order_depends_target_mpointers
-  DEP_FILE = CMakeFiles\mpointers.dir\mpointer\socket_client.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
-  OBJECT_DIR = CMakeFiles\mpointers.dir
-  OBJECT_FILE_DIR = CMakeFiles\mpointers.dir\mpointer
-
-build CMakeFiles/mpointers.dir/examples/linked_list.cpp.obj: CXX_COMPILER__mpointers_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/examples/linked_list.cpp || cmake_object_order_depends_target_mpointers
-  DEP_FILE = CMakeFiles\mpointers.dir\examples\linked_list.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
-  OBJECT_DIR = CMakeFiles\mpointers.dir
-  OBJECT_FILE_DIR = CMakeFiles\mpointers.dir\examples
-
-build CMakeFiles/mpointers.dir/examples/main.cpp.obj: CXX_COMPILER__mpointers_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/examples/main.cpp || cmake_object_order_depends_target_mpointers
-  DEP_FILE = CMakeFiles\mpointers.dir\examples\main.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
-  OBJECT_DIR = CMakeFiles\mpointers.dir
-  OBJECT_FILE_DIR = CMakeFiles\mpointers.dir\examples
+build CMakeFiles/memory_manager.dir/tests/mponter_test.cpp.obj: CXX_COMPILER__memory_manager_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/tests/mponter_test.cpp || cmake_object_order_depends_target_memory_manager
+  DEP_FILE = CMakeFiles\memory_manager.dir\tests\mponter_test.cpp.obj.d
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/roarb/Documents/Projects/mpointers
+  OBJECT_DIR = CMakeFiles\memory_manager.dir
+  OBJECT_FILE_DIR = CMakeFiles\memory_manager.dir\tests
 
 
 # =============================================================================
-# Link build statements for EXECUTABLE target mpointers
+# Link build statements for EXECUTABLE target memory_manager
 
 
 #############################################
-# Link the executable mpointers.exe
+# Link the executable memory_manager.exe
 
-build mpointers.exe: CXX_EXECUTABLE_LINKER__mpointers_Debug CMakeFiles/mpointers.dir/main.cpp.obj CMakeFiles/mpointers.dir/protocol/message.cpp.obj CMakeFiles/mpointers.dir/memory_manager/main.cpp.obj CMakeFiles/mpointers.dir/memory_manager/memory_manager.cpp.obj CMakeFiles/mpointers.dir/memory_manager/garbage_collector.cpp.obj CMakeFiles/mpointers.dir/memory_manager/socket_server.cpp.obj CMakeFiles/mpointers.dir/mpointer/socket_client.cpp.obj CMakeFiles/mpointers.dir/examples/linked_list.cpp.obj CMakeFiles/mpointers.dir/examples/main.cpp.obj
+build memory_manager.exe: CXX_EXECUTABLE_LINKER__memory_manager_Debug CMakeFiles/memory_manager.dir/memory_manager/main.cpp.obj CMakeFiles/memory_manager.dir/memory_manager/memory_manager.cpp.obj CMakeFiles/memory_manager.dir/memory_manager/socket_server.cpp.obj CMakeFiles/memory_manager.dir/memory_manager/garbage_collector.cpp.obj CMakeFiles/memory_manager.dir/protocol/message.cpp.obj CMakeFiles/memory_manager.dir/tests/mponter_test.cpp.obj
   FLAGS = -g
-  LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
-  OBJECT_DIR = CMakeFiles\mpointers.dir
+  LINK_LIBRARIES = -lws2_32  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+  OBJECT_DIR = CMakeFiles\memory_manager.dir
   POST_BUILD = cd .
   PRE_LINK = cd .
-  TARGET_FILE = mpointers.exe
-  TARGET_IMPLIB = libmpointers.dll.a
-  TARGET_PDB = mpointers.exe.dbg
+  TARGET_FILE = memory_manager.exe
+  TARGET_IMPLIB = libmemory_manager.dll.a
+  TARGET_PDB = memory_manager.exe.dbg
 
 
 #############################################
@@ -147,7 +135,7 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 # =============================================================================
 # Target aliases.
 
-build mpointers: phony mpointers.exe
+build memory_manager: phony memory_manager.exe
 
 # =============================================================================
 # Folder targets.
@@ -157,7 +145,7 @@ build mpointers: phony mpointers.exe
 #############################################
 # Folder: C:/Users/roarb/Documents/Projects/mpointers/cmake-build-debug
 
-build all: phony mpointers.exe
+build all: phony memory_manager.exe
 
 # =============================================================================
 # Built-in targets

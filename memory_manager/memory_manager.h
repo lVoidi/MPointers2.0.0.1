@@ -7,6 +7,12 @@
 
 #endif //MEMORY_MANAGER_H
 
+#include<iostream>
+#include<unordered_map>
+#include<mutex>
+#include<thread>
+#include<string>
+
 class MemoryManager {
 public:
     MemoryManager(size_t size_mb, const std::string& dump_folder);
