@@ -5,7 +5,10 @@
 #ifndef MESSAGE_H
 #define MESSAGE_H
 
-#endif //MESSAGE_H
+#include <vector>
+#include <string>
+#include <cstring>
+#include <stdexcept>
 
 enum class MessageType {
     CREATE,
@@ -27,11 +30,26 @@ public:
     std::vector<char> serialize() const;
     static Message deserialize(const std::vector<char>& buffer);
 
-    // Getters for message properties
-    MessageType getType() const;
-    // Other accessor methods
+    // Getters para propiedades del mensaje
+    MessageType getType() const { return type_; }
+    int getId() const { return id_; }
+    size_t getSize() const { return size_; }
+    const std::string& getDataType() const { return data_type_; }
+    bool isSuccess() const { return success_; }
+    const std::vector<char>& getData() const { return data_; }
 
 private:
     MessageType type_;
-    // Message data fields
+    int id_;                      // ID del bloque de memoria
+    size_t size_;                 // Tamaño a reservar (para CREATE)
+    std::string data_type_;       // Tipo de datos (para CREATE)
+    bool success_;                // Éxito/fracaso (para RESPONSE)
+    std::vector<char> data_;      // Datos serializados
+
+    // Constructor privado para uso interno
+    Message(MessageType type, int id = -1, size_t size = 0,
+            const std::string& dataType = "", bool success = false,
+            const std::vector<char>& data = {});
 };
+
+#endif //MESSAGE_H
