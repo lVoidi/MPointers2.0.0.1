@@ -84,7 +84,7 @@ public:
 
     // Operador de asignación
     MPointer<T>& operator=(const MPointer<T>& other) {
-        if (this != &other) {
+        if (this != std::addressof(other)) {
             // Decrementar referencia al bloque actual
             if (id_ >= 0) {
                 client_->decreaseRefCount(id_);
