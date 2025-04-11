@@ -5,28 +5,31 @@
 #ifndef SOCKET_CLIENT_H
 #define SOCKET_CLIENT_H
 
+#include <winsock2.h>
+#include <ws2tcpip.h>
 #include <string>
 #include <vector>
+#include <memory>
 #include <mutex>
+#include <atomic>
+#include <stdexcept> // Para stdexcept
+#include <iostream> // Para cout/cerr
+
 #include "../protocol/message.h"
 
-// Inclusión específica de Windows
-#include <WinSock2.h>
-#include <WS2tcpip.h>
+#pragma comment(lib, "Ws2_32.lib")
 
 class SocketClient {
 public:
-    SocketClient();
-    ~SocketClient();
+    SocketClient(); // Quitar WSAStartup
+    ~SocketClient(); // Quitar WSACleanup
 
     bool connect(const std::string& host, int port);
     bool isConnected() const;
     void disconnect();
-
-    // Métodos para enviar solicitudes al servidor y recibir respuestas
     Message sendRequest(const Message& request);
 
-    // Métodos específicos para cada tipo de operación
+    // Métodos específicos para el Memory Manager
     int createMemoryBlock(size_t size, const std::string& type);
     bool setMemoryBlock(int id, const std::vector<char>& data);
     std::vector<char> getMemoryBlock(int id);
@@ -34,15 +37,18 @@ public:
     bool decreaseRefCount(int id);
 
 private:
-    SOCKET socket_fd_;
-    bool connected_;
-    std::mutex socket_mutex_;
-    std::string host_;
-    int port_;
-
+    bool tryReconnect();
     bool sendMessage(const Message& message);
     Message receiveMessage();
-    bool tryReconnect();
+
+    SOCKET socket_fd_;
+    std::string host_;
+    int port_;
+    std::atomic<bool> connected_;
+    std::mutex socket_mutex_; // Para proteger acceso multihilo al socket
+
+    // Contador estático para gestionar Winsock
+    static std::atomic<int> instance_count_;
 };
 
 #endif //SOCKET_CLIENT_H

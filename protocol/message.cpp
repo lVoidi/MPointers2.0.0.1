@@ -103,14 +103,23 @@ Message Message::deserialize(const std::vector<char>& buffer) {
     offset += sizeof(int);
 
     // Leer tipo de datos
+    if (offset + type_length > buffer.size()) {
+        throw std::runtime_error("Buffer overrun while reading data type string in deserialize");
+    }
     std::string data_type(buffer.data() + offset, buffer.data() + offset + type_length);
     offset += type_length;
 
     // Leer indicador de éxito
+    if (offset + 1 > buffer.size()) {
+         throw std::runtime_error("Buffer overrun while reading success flag in deserialize");
+    }
     bool success = buffer[offset] != 0;
     offset += 1;
 
     // Leer longitud de datos
+    if (offset + sizeof(int) > buffer.size()) {
+         throw std::runtime_error("Buffer overrun while reading data size in deserialize");
+    }
     int data_size;
     std::memcpy(&data_size, buffer.data() + offset, sizeof(int));
     offset += sizeof(int);
@@ -118,6 +127,9 @@ Message Message::deserialize(const std::vector<char>& buffer) {
     // Leer datos
     std::vector<char> data;
     if (data_size > 0) {
+         if (offset + data_size > buffer.size()) {
+             throw std::runtime_error("Buffer overrun while reading data payload in deserialize");
+         }
         data.assign(buffer.data() + offset, buffer.data() + offset + data_size);
     }
 

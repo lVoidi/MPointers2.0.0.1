@@ -17,9 +17,9 @@ int main(int argc, char* argv[]) {
     int port = std::stoi(argv[2]);
 
     try {
-        // Inicializar la conexión con el servidor de memoria
-        std::cout << "Conectando al Memory Manager en " << host << ":" << port << std::endl;
-        MPointer<int>::Init(host, port);
+        // Inicializar la conexión usando el método estático centralizado
+        // MPointer<int>::Init(host, port);
+        MPointerConnection::Init(host, port);
         std::cout << "Conexión establecida correctamente" << std::endl;
 
         // Crear una lista enlazada de enteros

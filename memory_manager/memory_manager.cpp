@@ -32,56 +32,80 @@ MemoryManager::~MemoryManager() {
 }
 
 int MemoryManager::create(size_t size, const std::string& type) {
-    std::lock_guard<std::mutex> lock(memory_mutex_);
+    std::lock_guard<std::recursive_mutex> lock(memory_mutex_);
+    std::cout << "[MemoryManager] Attempting to create block of size " << size << std::endl;
 
-    // Find first suitable free block
     size_t offset = 0;
-    size_t available_size = 0;
     bool found = false;
 
-    // Simple first-fit algorithm
-    for (size_t i = 0; i < memory_size_; i += available_size) {
-        available_size = 0;
-
-        // Check each byte until we find a sequence long enough
-        bool in_use = false;
+    // --- Revised First-Fit Algorithm ---
+    std::cout << "[MemoryManager] Starting revised first-fit search..." << std::endl;
+    size_t current_offset = 0;
+    while (current_offset < memory_size_) {
+        // Check if current_offset is within an existing used block
+        bool occupied = false;
+        size_t occupying_block_end = current_offset;
+        int occupying_block_id = -1;
         for (const auto& [id, block] : blocks_) {
-            if (block.in_use && block.offset <= i && i < block.offset + block.size) {
-                in_use = true;
-                // Skip to end of this block
-                i = block.offset + block.size - 1; // -1 because loop will add available_size (which is 0)
+            if (block.in_use && block.offset <= current_offset && current_offset < block.offset + block.size) {
+                occupied = true;
+                occupying_block_end = block.offset + block.size;
+                occupying_block_id = id;
                 break;
             }
         }
 
-        if (!in_use) {
-            // Count consecutive free bytes
-            available_size = 1;
-            for (size_t j = i + 1; j < memory_size_ && available_size < size; j++) {
-                bool byte_in_use = false;
-                for (const auto& [id, block] : blocks_) {
-                    if (block.in_use && block.offset <= j && j < block.offset + block.size) {
-                        byte_in_use = true;
-                        break;
-                    }
-                }
-                if (byte_in_use) break;
-                available_size++;
-            }
+        if (occupied) {
+            // If occupied, skip past the occupying block
+            std::cout << "[MemoryManager] Offset " << current_offset << " is occupied by block " << occupying_block_id << ". Skipping to " << occupying_block_end << std::endl;
+            current_offset = occupying_block_end;
+            continue; // Check the next position immediately after the block
+        }
 
-            if (available_size >= size) {
-                offset = i;
-                found = true;
-                break;
+        // If not occupied, find the size of the contiguous free block starting at current_offset
+        size_t available_size = 0;
+        size_t check_offset = current_offset;
+        while (check_offset < memory_size_) {
+            bool next_byte_occupied = false;
+            for (const auto& [id, block] : blocks_) {
+                if (block.in_use && block.offset <= check_offset && check_offset < block.offset + block.size) {
+                    next_byte_occupied = true;
+                    break;
+                }
+            }
+            if (next_byte_occupied) {
+                break; // End of the contiguous free block
+            }
+            available_size++;
+            check_offset++;
+        }
+        std::cout << "[MemoryManager] Found free block at offset " << current_offset << " of size " << available_size << std::endl;
+
+        // Check if this free block is large enough
+        if (available_size >= size) {
+            offset = current_offset;
+            found = true;
+            std::cout << "[MemoryManager] Found suitable block at offset " << offset << std::endl;
+            break; // Exit the while loop, suitable block found
+        } else {
+            // Free block not large enough, move to the position after this free block
+            current_offset += available_size;
+            // If available_size was 0 (e.g., we hit the end of memory immediately), ensure we advance.
+            if (available_size == 0) {
+                current_offset++;
             }
         }
     }
+    std::cout << "[MemoryManager] Finished first-fit search. Found: " << (found ? "Yes" : "No") << std::endl;
+    // --- End of Revised First-Fit Algorithm ---
 
     if (!found) {
+        std::cout << "[MemoryManager] No suitable block found initially, attempting defragmentation..." << std::endl; // Log
         // Try to defragment and retry
         compactMemory();
 
-        // Simple allocation after defragmentation - just get the first free block
+        // Simple allocation after defragmentation - find end of last block
+        std::cout << "[MemoryManager] Defragmentation complete, retrying allocation..." << std::endl; // Log
         offset = 0;
         for (const auto& [id, block] : blocks_) {
             if (block.in_use) {
@@ -94,8 +118,17 @@ int MemoryManager::create(size_t size, const std::string& type) {
 
         // Check if we have enough space after all blocks
         if (offset + size > memory_size_) {
+            std::cerr << "[MemoryManager] Out of memory even after defragmentation." << std::endl; // Log
             return -1;  // Out of memory
         }
+        std::cout << "[MemoryManager] Found space after defragmentation at offset " << offset << std::endl; // Log
+        found = true; // Mark as found since we allocated after defrag
+    }
+
+    // If we still haven't found space (e.g., defrag didn't help enough or wasn't needed but space check failed)
+    if (!found) {
+         std::cerr << "[MemoryManager] Failed to find or create space for the requested size." << std::endl;
+         return -1; // Should not happen if logic above is correct, but safeguard
     }
 
     // Create new memory block
@@ -109,13 +142,14 @@ int MemoryManager::create(size_t size, const std::string& type) {
         .ref_count = 1,
         .in_use = true
     };
+    std::cout << "[MemoryManager] Created block ID " << id << " at offset " << offset << " size " << size << std::endl; // Add log
 
     dumpMemoryState();
     return id;
 }
 
 bool MemoryManager::set(int id, const void* value, size_t size) {
-    std::lock_guard<std::mutex> lock(memory_mutex_);
+    std::lock_guard<std::recursive_mutex> lock(memory_mutex_);
 
     auto it = blocks_.find(id);
     if (it == blocks_.end() || !it->second.in_use) {
@@ -135,25 +169,33 @@ bool MemoryManager::set(int id, const void* value, size_t size) {
 }
 
 bool MemoryManager::get(int id, void* result, size_t size) {
-    std::lock_guard<std::mutex> lock(memory_mutex_);
+    std::lock_guard<std::recursive_mutex> lock(memory_mutex_);
 
     auto it = blocks_.find(id);
-    if (it == blocks_.end() || !it->second.in_use) {
-        return false;  // Invalid ID or block not in use
+    if (it == blocks_.end()) {
+        std::cerr << "[MemoryManager] GET failed for ID " << id << ": Block not found in map." << std::endl;
+        return false; // ID no existe
+    }
+    
+    if (!it->second.in_use) {
+         std::cerr << "[MemoryManager] GET failed for ID " << id << ": Block marked as not in use." << std::endl;
+         return false; // Bloque no en uso
     }
 
     MemoryBlock& block = it->second;
     if (size > block.size) {
+        std::cerr << "[MemoryManager] GET failed for ID " << id << ": Requested size (" << size << ") > block size (" << block.size << ")." << std::endl;
         return false;  // Requested size too large
     }
 
     // Copy from memory pool to result buffer
+    std::cout << "[MemoryManager] GET successful for ID " << id << ". Copying " << size << " bytes." << std::endl; // Log éxito
     memcpy(result, memory_pool_ + block.offset, size);
     return true;
 }
 
 bool MemoryManager::increaseRefCount(int id) {
-    std::lock_guard<std::mutex> lock(memory_mutex_);
+    std::lock_guard<std::recursive_mutex> lock(memory_mutex_);
 
     auto it = blocks_.find(id);
     if (it == blocks_.end() || !it->second.in_use) {
@@ -165,7 +207,7 @@ bool MemoryManager::increaseRefCount(int id) {
 }
 
 bool MemoryManager::decreaseRefCount(int id) {
-    std::lock_guard<std::mutex> lock(memory_mutex_);
+    std::lock_guard<std::recursive_mutex> lock(memory_mutex_);
 
     auto it = blocks_.find(id);
     if (it == blocks_.end() || !it->second.in_use) {
@@ -184,7 +226,7 @@ bool MemoryManager::decreaseRefCount(int id) {
 }
 
 void MemoryManager::compactMemory() {
-    std::lock_guard<std::mutex> lock(memory_mutex_);
+    std::lock_guard<std::recursive_mutex> lock(memory_mutex_);
     std::cout << "Starting memory defragmentation..." << std::endl;
 
     // Verificar si hay bloques que necesitan liberarse
@@ -280,6 +322,7 @@ void MemoryManager::compactMemory() {
 }
 
 void MemoryManager::dumpMemoryState() {
+    std::cout << "[Dump] Starting dumpMemoryState..." << std::endl; // Log inicio dump
     auto now = std::chrono::system_clock::now();
     auto now_time = std::chrono::system_clock::to_time_t(now);
     auto now_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -343,7 +386,8 @@ void MemoryManager::dumpMemoryState() {
     }
 
     dump_file.close();
-    std::cout << "Memory dump created: " << filename.str() << std::endl;
+    std::cout << "[Dump] Memory dump created: " << filename.str() << std::endl;
+    std::cout << "[Dump] Finished dumpMemoryState." << std::endl; // Log fin dump
 }
 
 void MemoryManager::startGarbageCollector() {

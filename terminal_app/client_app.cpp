@@ -73,7 +73,8 @@ public:
     bool initialize(const std::string& host, int port) {
         try {
             std::cout << "Conectando al servidor en " << host << ":" << port << "..." << std::endl;
-            MPointer<int>::Init(host, port);
+            // MPointer<int>::Init(host, port); // Línea original comentada
+            MPointerConnection::Init(host, port); // Usar Init centralizado
             std::cout << "Conexión establecida correctamente" << std::endl;
             return true;
         } catch (const std::exception& e) {

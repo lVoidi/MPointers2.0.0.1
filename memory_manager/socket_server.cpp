@@ -79,15 +79,6 @@ void SocketServer::stop() {
         if (accept_thread_.joinable()) {
             accept_thread_.join();
         }
-
-        // Wait for all client threads
-        for (auto& thread : client_threads_) {
-            if (thread.joinable()) {
-                thread.join();
-            }
-        }
-
-        client_threads_.clear();
     }
 }
 
@@ -107,8 +98,9 @@ void SocketServer::acceptConnections() {
 
         std::cout << "Client connected" << std::endl;
 
-        // Handle client in a separate thread
-        client_threads_.emplace_back(&SocketServer::handleClient, this, client_socket);
+        // Handle client in a separate thread and detach it
+        std::thread client_thread(&SocketServer::handleClient, this, client_socket);
+        client_thread.detach();
     }
 }
 
@@ -135,42 +127,59 @@ void SocketServer::handleClient(int client_socket) {
                                   message_length - bytes_received, 0);
                 if (recv_result <= 0) {
                     std::cerr << "Error receiving message data: " << WSAGetLastError() << std::endl;
-                    closesocket(client_socket);
-                    return;
+                    break;
                 }
                 bytes_received += recv_result;
             }
 
+            // Si salimos del bucle anterior por un error (recv_result <= 0), 
+            // no debemos continuar procesando el mensaje.
+            if (recv_result <= 0) {
+                break;
+            }
+
             // Deserialize the message
             Message request = Message::deserialize(buffer);
-            std::cout << "Received message of type: " << static_cast<int>(request.getType()) << std::endl;
+            std::cout << "[SocketServer] Received message of type: " << static_cast<int>(request.getType()) << " for socket " << client_socket << std::endl;
 
             // Process the request
+            std::cout << "[SocketServer] Processing request for socket " << client_socket << "..." << std::endl;
             Message response = processRequest(request);
+            std::cout << "[SocketServer] Request processed for socket " << client_socket << "." << std::endl;
 
             // Serialize and send the response
+            std::cout << "[SocketServer] Serializing response for socket " << client_socket << "..." << std::endl;
             std::vector<char> response_data = response.serialize();
             int response_length = static_cast<int>(response_data.size());
+            std::cout << "[SocketServer] Sending response (length: " << response_length << ") to socket " << client_socket << "..." << std::endl;
 
             // Send response length
-            if (send(client_socket, reinterpret_cast<char*>(&response_length), sizeof(int), 0) != sizeof(int)) {
-                std::cerr << "Error sending response length: " << WSAGetLastError() << std::endl;
+            std::cout << "[SocketServer] Sending response length for socket " << client_socket << "..." << std::endl;
+            int send_len_result = send(client_socket, reinterpret_cast<char*>(&response_length), sizeof(int), 0);
+            if (send_len_result != sizeof(int)) {
+                std::cerr << "[SocketServer] Error sending response length: " << WSAGetLastError() << " for socket " << client_socket << std::endl;
                 break;
             }
+            std::cout << "[SocketServer] Response length sent for socket " << client_socket << "." << std::endl;
 
             // Send response data
-            if (send(client_socket, response_data.data(), response_length, 0) != response_length) {
-                std::cerr << "Error sending response data: " << WSAGetLastError() << std::endl;
+            std::cout << "[SocketServer] Sending response data for socket " << client_socket << "..." << std::endl;
+            int send_data_result = send(client_socket, response_data.data(), response_length, 0);
+            if (send_data_result != response_length) {
+                std::cerr << "[SocketServer] Error sending response data: " << WSAGetLastError() << " for socket " << client_socket << std::endl;
                 break;
             }
+            std::cout << "[SocketServer] Response data sent for socket " << client_socket << "." << std::endl;
         }
     }
     catch (const std::exception& e) {
-        std::cerr << "Error handling client: " << e.what() << std::endl;
+        std::cerr << "[SocketServer] Exception in handleClient for socket " << client_socket << ": " << e.what() << std::endl;
     }
 
+    std::cout << "[SocketServer] Closing client socket " << client_socket << "..." << std::endl;
     // Close client socket
     closesocket(client_socket);
+    std::cout << "[SocketServer] Client socket " << client_socket << " closed." << std::endl;
 }
 
 Message SocketServer::processRequest(const Message& request) {
@@ -200,30 +209,37 @@ Message SocketServer::processRequest(const Message& request) {
         case MessageType::GET: {
             int id = request.getId();
 
-            // Primero determinar el tamaño correcto del bloque de memoria
+            // --- Bloqueo para leer tamaño y datos consistentemente ---
             size_t blockSize = 0;
-            for (const auto& pair : memory_manager_->blocks_) {
-                if (pair.first == id && pair.second.in_use) {
-                    blockSize = pair.second.size;
-                    break;
+            bool foundBlock = false;
+            {
+                std::lock_guard<std::recursive_mutex> lock(memory_manager_->memory_mutex_);
+                auto it = memory_manager_->blocks_.find(id);
+                if (it != memory_manager_->blocks_.end() && it->second.in_use) {
+                    blockSize = it->second.size;
+                    foundBlock = true;
                 }
-            }
+            } // Mutex liberado aquí
+            // --------------------------------------------------------
 
-            if (blockSize == 0) {
+            if (!foundBlock) {
                 // No se encontró el bloque o no está en uso
+                std::cerr << "[SocketServer] GET failed for ID " << id << ": Block not found or not in use when checking size." << std::endl;
                 return Message::response(false);
             }
 
             // Ahora reservamos un buffer del tamaño exacto
             std::vector<char> result(blockSize);
 
-            // Obtener los datos del bloque
+            // Obtener los datos del bloque (get adquiere su propio lock)
             bool success = memory_manager_->get(id, result.data(), blockSize);
 
             // Solo usar los bytes exactos en la respuesta
             if (success) {
                 return Message::response(true, result);
             } else {
+                // Loguear por qué get() falló si blockSize > 0
+                 std::cerr << "[SocketServer] GET failed for ID " << id << ": memory_manager_->get returned false unexpectedly." << std::endl;
                 return Message::response(false);
             }
         }

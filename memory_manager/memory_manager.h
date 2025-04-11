@@ -12,6 +12,7 @@
 #include<mutex>
 #include<thread>
 #include<string>
+#include <vector>
 
 class GarbageCollector; // Declaración adelantada
 class SocketServer;     // Declaración adelantada
@@ -48,7 +49,7 @@ private:
     };
 
     std::unordered_map<int, MemoryBlock> blocks_;
-    std::mutex memory_mutex_;
+    std::recursive_mutex memory_mutex_;
     std::thread gc_thread_;
 
     void compactMemory();           // Memory defragmentation

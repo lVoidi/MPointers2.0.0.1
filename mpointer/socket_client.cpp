@@ -8,23 +8,41 @@
 #include <thread>
 #include <chrono>
 #include <Windows.h>
+#include "../mpointer/mpointer.h"
 
 // Enlazar con la biblioteca de sockets de Windows
-#pragma comment(lib, "Ws2_32.lib")
+// #pragma comment(lib, "Ws2_32.lib") // Ya está en .h
+
+// Definición e inicialización del contador estático
+std::atomic<int> SocketClient::instance_count_{0};
+
+// Definición e inicialización del cliente estático compartido
+std::shared_ptr<SocketClient> MPointerConnection::client_ = nullptr;
 
 SocketClient::SocketClient() : socket_fd_(INVALID_SOCKET), connected_(false), port_(0) {
-    // Inicializar Winsock
-    WSADATA wsaData;
-    int result = WSAStartup(MAKEWORD(2, 2), &wsaData);
-    if (result != 0) {
-        std::cerr << "WSAStartup falló con error: " << result << std::endl;
-        throw std::runtime_error("No se pudo inicializar Winsock");
+    // Incrementar contador y llamar a WSAStartup si es la primera instancia
+    if (instance_count_.fetch_add(1) == 0) {
+        WSADATA wsaData;
+        int result = WSAStartup(MAKEWORD(2, 2), &wsaData);
+        if (result != 0) {
+             instance_count_.fetch_sub(1); // Revertir contador si falla
+             std::cerr << "WSAStartup falló con error: " << result << std::endl;
+             throw std::runtime_error("No se pudo inicializar Winsock");
+        }
+        // std::cout << "Winsock inicializado por primera instancia de SocketClient." << std::endl;
     }
 }
 
 SocketClient::~SocketClient() {
     disconnect();
-    WSACleanup();
+    // Decrementar contador y llamar a WSACleanup si es la última instancia
+    if (instance_count_.fetch_sub(1) == 1) {
+         if (WSACleanup() != 0) {
+            // Loggear error pero no lanzar excepción desde destructor
+            std::cerr << "WSACleanup failed with error: " << WSAGetLastError() << std::endl;
+         }
+        // std::cout << "Winsock limpiado por última instancia de SocketClient." << std::endl;
+    }
 }
 
 bool SocketClient::connect(const std::string& host, int port) {
@@ -58,7 +76,7 @@ bool SocketClient::connect(const std::string& host, int port) {
     }
 
     // Configurar timeout para el socket
-    DWORD timeout = 5000;  // 5 segundos en milisegundos
+    DWORD timeout = 15000;  // 15 segundos en milisegundos
     setsockopt(socket_fd_, SOL_SOCKET, SO_RCVTIMEO, (const char*)&timeout, sizeof(timeout));
     setsockopt(socket_fd_, SOL_SOCKET, SO_SNDTIMEO, (const char*)&timeout, sizeof(timeout));
 
@@ -106,11 +124,45 @@ bool SocketClient::tryReconnect() {
 
     // Intentar reconectar hasta 3 veces
     for (int attempt = 0; attempt < 3; ++attempt) {
-        if (connect(host_, port_)) {
-            std::cerr << "Reconexión exitosa" << std::endl;
-            return true;
+        // Crear el socket
+        socket_fd_ = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+        if (socket_fd_ == INVALID_SOCKET) {
+            std::cerr << "Error al crear el socket: " << WSAGetLastError() << std::endl;
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+            continue;
         }
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+
+        // Configurar dirección del servidor
+        struct sockaddr_in server_addr;
+        std::memset(&server_addr, 0, sizeof(server_addr));
+        server_addr.sin_family = AF_INET;
+        server_addr.sin_port = htons(port_);
+
+        if (inet_pton(AF_INET, host_.c_str(), &server_addr.sin_addr) <= 0) {
+            std::cerr << "Dirección inválida: " << host_ << std::endl;
+            closesocket(socket_fd_);
+            socket_fd_ = INVALID_SOCKET;
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+            continue;
+        }
+
+        // Configurar timeout para el socket
+        DWORD timeout = 15000;  // 15 segundos en milisegundos
+        setsockopt(socket_fd_, SOL_SOCKET, SO_RCVTIMEO, (const char*)&timeout, sizeof(timeout));
+        setsockopt(socket_fd_, SOL_SOCKET, SO_SNDTIMEO, (const char*)&timeout, sizeof(timeout));
+
+        // Conectar al servidor
+        if (::connect(socket_fd_, (struct sockaddr*)&server_addr, sizeof(server_addr)) == SOCKET_ERROR) {
+            std::cerr << "Error de conexión: " << WSAGetLastError() << std::endl;
+            closesocket(socket_fd_);
+            socket_fd_ = INVALID_SOCKET;
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+            continue;
+        }
+
+        connected_ = true;
+        std::cerr << "Reconexión exitosa" << std::endl;
+        return true;
     }
 
     std::cerr << "No se pudo reconectar al servidor después de 3 intentos" << std::endl;
@@ -197,42 +249,57 @@ Message SocketClient::receiveMessage() {
 }
 
 Message SocketClient::sendRequest(const Message& request) {
-    std::lock_guard<std::mutex> lock(socket_mutex_);
-
-    // Intentar enviar el mensaje
-    bool sent = false;
-    try {
-        sent = sendMessage(request);
-    } catch (const std::exception& e) {
-        sent = false;
-    }
-
-    // Si falla, intentar reconectar y reenviar
-    if (!sent) {
-        if (!tryReconnect()) {
-            throw std::runtime_error("Error al enviar solicitud: no conectado");
+    bool reconnection_needed = false;
+    
+    // Primer intento con el mutex bloqueado
+    {
+        std::lock_guard<std::mutex> lock(socket_mutex_);
+        
+        if (!connected_) {
+            reconnection_needed = true;
+        } else {
+            // Intentar enviar el mensaje
+            bool sent = false;
+            try {
+                sent = sendMessage(request);
+                if (sent) {
+                    // Si el envío fue exitoso, intentar recibir la respuesta
+                    try {
+                        return receiveMessage();
+                    } catch (const std::exception& e) {
+                        reconnection_needed = true;
+                    }
+                } else {
+                    reconnection_needed = true;
+                }
+            } catch (const std::exception&) {
+                reconnection_needed = true;
+            }
         }
+    }
+    
+    // Si se necesita reconexión, hacerlo fuera del bloque del mutex
+    if (reconnection_needed) {
+        if (!tryReconnect()) {
+            throw std::runtime_error("Error al enviar solicitud: no se pudo reconectar");
+        }
+        
+        // Volver a intentar con el mutex bloqueado después de la reconexión
+        std::lock_guard<std::mutex> lock(socket_mutex_);
+        
         if (!sendMessage(request)) {
             throw std::runtime_error("Error al enviar solicitud después de reconectar");
         }
-    }
-
-    // Recibir respuesta
-    try {
-        return receiveMessage();
-    } catch (const std::exception& e) {
-        // Intentar reconectar y reenviar si hay problemas al recibir
-        if (!tryReconnect()) {
+        
+        try {
+            return receiveMessage();
+        } catch (const std::exception& e) {
             throw std::runtime_error(std::string("Error al recibir respuesta: ") + e.what());
         }
-
-        // Reenviar la solicitud después de reconectar
-        if (!sendMessage(request)) {
-            throw std::runtime_error("Error al reenviar solicitud después de reconectar");
-        }
-
-        return receiveMessage();  // Volver a intentar recibir
     }
+    
+    // Este punto nunca debería alcanzarse, pero por si acaso lanzamos una excepción
+    throw std::runtime_error("Error inesperado en la comunicación con el servidor");
 }
 
 int SocketClient::createMemoryBlock(size_t size, const std::string& type) {

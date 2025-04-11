@@ -51,13 +51,13 @@ public:
 private:
     struct Node {
         T data;
-        MPointer<Node> next;
+        int next_id;
 
         // Constructor con valor
-        Node(const T& value) : data(value), next() {}
+        Node(const T& value) : data(value), next_id(-1) {}
         
         // Constructor por defecto
-        Node() : data(), next() {}
+        Node() : data(), next_id(-1) {}
     };
 
     MPointer<Node> head_;
@@ -70,33 +70,41 @@ private:
 template <typename T>
 void LinkedList<T>::pushBack(const T& value) {
     MPointer<Node> newNode = MPointer<Node>::New();
-    *newNode = Node(value);
+    Node nodeData(value);
+    *newNode = nodeData;
 
     if (isEmpty()) {
         head_ = newNode;
         tail_ = newNode;
     } else {
-        (*tail_).next = newNode;
+        Node tailNode = *tail_;
+        tailNode.next_id = &newNode;
+        *tail_ = tailNode;
         tail_ = newNode;
     }
 
     size_++;
+    // Liberar newNode para que su destructor no haga decref
+    newNode.release();
 }
 
 template <typename T>
 void LinkedList<T>::pushFront(const T& value) {
     MPointer<Node> newNode = MPointer<Node>::New();
-    *newNode = Node(value);
-
-    if (isEmpty()) {
-        head_ = newNode;
-        tail_ = newNode;
-    } else {
-        (*newNode).next = head_;
-        head_ = newNode;
+    Node nodeData(value);
+    if (head_.isValid()) {
+        nodeData.next_id = &head_;
     }
-
+    *newNode = nodeData;
+    
+    head_ = newNode;
+    if (isEmpty()) {
+        tail_ = newNode;
+    }
+    
     size_++;
+    // Liberar newNode para que su destructor no haga decref
+    newNode.release();
 }
 
 template <typename T>
@@ -107,16 +115,20 @@ T LinkedList<T>::get(size_t index) const {
 
     MPointer<Node> current = head_;
     for (size_t i = 0; i < index; i++) {
-        current = (*current).next;
+        Node currentNode = *current;
+        if (currentNode.next_id < 0) {
+             throw std::runtime_error("Error de lógica: Se alcanzó el final de la lista inesperadamente en get");
+        }
+        current = MPointer<Node>(currentNode.next_id);
     }
 
-    return (*current).data;
+    Node resultNode = *current;
+    current.release();
+    return resultNode.data;
 }
 
 template <typename T>
 void LinkedList<T>::clear() {
-    // Los MPointers se encargarán de decrementar las referencias
-    // cuando se asigna nullptr
     head_ = MPointer<Node>();
     tail_ = MPointer<Node>();
     size_ = 0;
@@ -129,29 +141,35 @@ void LinkedList<T>::remove(size_t index) {
     }
 
     if (index == 0) {
-        // Eliminar el primer elemento
-        MPointer<Node> temp = head_;
-        head_ = (*head_).next;
-        
-        // Si la lista queda vacía, actualizar tail_
-        if (head_.getId() < 0) {
+        Node headNode = *head_;
+        if(headNode.next_id >= 0) {
+            head_ = MPointer<Node>(headNode.next_id);
+        } else {
+            head_ = MPointer<Node>();
             tail_ = MPointer<Node>();
         }
     } else {
-        // Encontrar el nodo anterior al que se eliminará
         MPointer<Node> prev = head_;
         for (size_t i = 0; i < index - 1; i++) {
-            prev = (*prev).next;
+            Node prevNode = *prev;
+            if (prevNode.next_id < 0) {
+                 throw std::runtime_error("Error de lógica: Se alcanzó el final de la lista inesperadamente en remove");
+            }
+            prev = MPointer<Node>(prevNode.next_id);
         }
 
-        // Guardar referencia al nodo a eliminar
-        MPointer<Node> toRemove = (*prev).next;
+        Node prevNode = *prev;
+        int remove_id = prevNode.next_id;
+        if(remove_id < 0) {
+             throw std::runtime_error("Error de lógica: El nodo a eliminar no existe");
+        }
+        MPointer<Node> toRemove = MPointer<Node>(remove_id);
+        Node toRemoveNode = *toRemove;
 
-        // Actualizar next del nodo anterior
-        (*prev).next = (*toRemove).next;
+        prevNode.next_id = toRemoveNode.next_id;
+        *prev = prevNode;
 
-        // Si eliminamos el último nodo, actualizar tail_
-        if (index == size_ - 1) {
+        if (toRemoveNode.next_id < 0) {
             tail_ = prev;
         }
     }
@@ -169,8 +187,15 @@ void LinkedList<T>::print() const {
     MPointer<Node> current = head_;
     std::cout << "Lista: ";
     while (current.isValid()) {
-        std::cout << (*current).data << " ";
-        current = (*current).next;
+        Node currentNode = *current;
+        std::cout << currentNode.data << " ";
+        int next_id = currentNode.next_id;
+        if (next_id >= 0) {
+            current = MPointer<Node>(next_id);
+        } else {
+            current.release();
+            break;
+        }
     }
     std::cout << std::endl;
 }
