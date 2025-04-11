@@ -1,0 +1,92 @@
+[
+{
+  "directory": "C:/Users/roarb/Documents/Projects/mpointers/cmake-build-debug",
+  "command": "C:\\PROGRA~1\\JETBRA~1\\CLION2~1.4\\bin\\mingw\\bin\\G__~1.EXE -g -std=gnu++20 -fdiagnostics-color=always -o CMakeFiles\\protocol.dir\\protocol\\message.cpp.obj -c C:\\Users\\roarb\\Documents\\Projects\\mpointers\\protocol\\message.cpp",
+  "file": "C:\\Users\\roarb\\Documents\\Projects\\mpointers\\protocol\\message.cpp",
+  "output": "CMakeFiles\\protocol.dir\\protocol\\message.cpp.obj"
+},
+{
+  "directory": "C:/Users/roarb/Documents/Projects/mpointers/cmake-build-debug",
+  "command": "C:\\PROGRA~1\\JETBRA~1\\CLION2~1.4\\bin\\mingw\\bin\\G__~1.EXE -g -std=gnu++20 -fdiagnostics-color=always -o CMakeFiles\\socket_client.dir\\mpointer\\socket_client.cpp.obj -c C:\\Users\\roarb\\Documents\\Projects\\mpointers\\mpointer\\socket_client.cpp",
+  "file": "C:\\Users\\roarb\\Documents\\Projects\\mpointers\\mpointer\\socket_client.cpp",
+  "output": "CMakeFiles\\socket_client.dir\\mpointer\\socket_client.cpp.obj"
+},
+{
+  "directory": "C:/Users/roarb/Documents/Projects/mpointers/cmake-build-debug",
+  "command": "C:\\PROGRA~1\\JETBRA~1\\CLION2~1.4\\bin\\mingw\\bin\\G__~1.EXE -g -std=gnu++20 -fdiagnostics-color=always -o CMakeFiles\\memory_manager.dir\\memory_manager\\main.cpp.obj -c C:\\Users\\roarb\\Documents\\Projects\\mpointers\\memory_manager\\main.cpp",
+  "file": "C:\\Users\\roarb\\Documents\\Projects\\mpointers\\memory_manager\\main.cpp",
+  "output": "CMakeFiles\\memory_manager.dir\\memory_manager\\main.cpp.obj"
+},
+{
+  "directory": "C:/Users/roarb/Documents/Projects/mpointers/cmake-build-debug",
+  "command": "C:\\PROGRA~1\\JETBRA~1\\CLION2~1.4\\bin\\mingw\\bin\\G__~1.EXE -g -std=gnu++20 -fdiagnostics-color=always -o CMakeFiles\\memory_manager.dir\\memory_manager\\memory_manager.cpp.obj -c C:\\Users\\roarb\\Documents\\Projects\\mpointers\\memory_manager\\memory_manager.cpp",
+  "file": "C:\\Users\\roarb\\Documents\\Projects\\mpointers\\memory_manager\\memory_manager.cpp",
+  "output": "CMakeFiles\\memory_manager.dir\\memory_manager\\memory_manager.cpp.obj"
+},
+{
+  "directory": "C:/Users/roarb/Documents/Projects/mpointers/cmake-build-debug",
+  "command": "C:\\PROGRA~1\\JETBRA~1\\CLION2~1.4\\bin\\mingw\\bin\\G__~1.EXE -g -std=gnu++20 -fdiagnostics-color=always -o CMakeFiles\\memory_manager.dir\\memory_manager\\garbage_collector.cpp.obj -c C:\\Users\\roarb\\Documents\\Projects\\mpointers\\memory_manager\\garbage_collector.cpp",
+  "file": "C:\\Users\\roarb\\Documents\\Projects\\mpointers\\memory_manager\\garbage_collector.cpp",
+  "output": "CMakeFiles\\memory_manager.dir\\memory_manager\\garbage_collector.cpp.obj"
+},
+{
+  "directory": "C:/Users/roarb/Documents/Projects/mpointers/cmake-build-debug",
+  "command": "C:\\PROGRA~1\\JETBRA~1\\CLION2~1.4\\bin\\mingw\\bin\\G__~1.EXE -g -std=gnu++20 -fdiagnostics-color=always -o CMakeFiles\\memory_manager.dir\\memory_manager\\socket_server.cpp.obj -c C:\\Users\\roarb\\Documents\\Projects\\mpointers\\memory_manager\\socket_server.cpp",
+  "file": "C:\\Users\\roarb\\Documents\\Projects\\mpointers\\memory_manager\\socket_server.cpp",
+  "output": "CMakeFiles\\memory_manager.dir\\memory_manager\\socket_server.cpp.obj"
+},
+{
+  "directory": "C:/Users/roarb/Documents/Projects/mpointers/cmake-build-debug",
+  "command": "C:\\PROGRA~1\\JETBRA~1\\CLION2~1.4\\bin\\mingw\\bin\\G__~1.EXE -g -std=gnu++20 -fdiagnostics-color=always -o CMakeFiles\\examples.dir\\examples\\main.cpp.obj -c C:\\Users\\roarb\\Documents\\Projects\\mpointers\\examples\\main.cpp",
+  "file": "C:\\Users\\roarb\\Documents\\Projects\\mpointers\\examples\\main.cpp",
+  "output": "CMakeFiles\\examples.dir\\examples\\main.cpp.obj"
+},
+{
+  "directory": "C:/Users/roarb/Documents/Projects/mpointers/cmake-build-debug",
+  "command": "C:\\PROGRA~1\\JETBRA~1\\CLION2~1.4\\bin\\mingw\\bin\\G__~1.EXE -g -std=gnu++20 -fdiagnostics-color=always -o CMakeFiles\\examples.dir\\examples\\linked_list.cpp.obj -c C:\\Users\\roarb\\Documents\\Projects\\mpointers\\examples\\linked_list.cpp",
+  "file": "C:\\Users\\roarb\\Documents\\Projects\\mpointers\\examples\\linked_list.cpp",
+  "output": "CMakeFiles\\examples.dir\\examples\\linked_list.cpp.obj"
+},
+{
+  "directory": "C:/Users/roarb/Documents/Projects/mpointers/cmake-build-debug",
+  "command": "C:\\PROGRA~1\\JETBRA~1\\CLION2~1.4\\bin\\mingw\\bin\\G__~1.EXE -g -std=gnu++20 -fdiagnostics-color=always -o CMakeFiles\\mpointer_test.dir\\tests\\mpointer_test.cpp.obj -c C:\\Users\\roarb\\Documents\\Projects\\mpointers\\tests\\mpointer_test.cpp",
+  "file": "C:\\Users\\roarb\\Documents\\Projects\\mpointers\\tests\\mpointer_test.cpp",
+  "output": "CMakeFiles\\mpointer_test.dir\\tests\\mpointer_test.cpp.obj"
+},
+{
+  "directory": "C:/Users/roarb/Documents/Projects/mpointers/cmake-build-debug",
+  "command": "C:\\PROGRA~1\\JETBRA~1\\CLION2~1.4\\bin\\mingw\\bin\\G__~1.EXE -g -std=gnu++20 -fdiagnostics-color=always -o CMakeFiles\\server_app.dir\\terminal_app\\server_app.cpp.obj -c C:\\Users\\roarb\\Documents\\Projects\\mpointers\\terminal_app\\server_app.cpp",
+  "file": "C:\\Users\\roarb\\Documents\\Projects\\mpointers\\terminal_app\\server_app.cpp",
+  "output": "CMakeFiles\\server_app.dir\\terminal_app\\server_app.cpp.obj"
+},
+{
+  "directory": "C:/Users/roarb/Documents/Projects/mpointers/cmake-build-debug",
+  "command": "C:\\PROGRA~1\\JETBRA~1\\CLION2~1.4\\bin\\mingw\\bin\\G__~1.EXE -g -std=gnu++20 -fdiagnostics-color=always -o CMakeFiles\\server_app.dir\\memory_manager\\memory_manager.cpp.obj -c C:\\Users\\roarb\\Documents\\Projects\\mpointers\\memory_manager\\memory_manager.cpp",
+  "file": "C:\\Users\\roarb\\Documents\\Projects\\mpointers\\memory_manager\\memory_manager.cpp",
+  "output": "CMakeFiles\\server_app.dir\\memory_manager\\memory_manager.cpp.obj"
+},
+{
+  "directory": "C:/Users/roarb/Documents/Projects/mpointers/cmake-build-debug",
+  "command": "C:\\PROGRA~1\\JETBRA~1\\CLION2~1.4\\bin\\mingw\\bin\\G__~1.EXE -g -std=gnu++20 -fdiagnostics-color=always -o CMakeFiles\\server_app.dir\\memory_manager\\garbage_collector.cpp.obj -c C:\\Users\\roarb\\Documents\\Projects\\mpointers\\memory_manager\\garbage_collector.cpp",
+  "file": "C:\\Users\\roarb\\Documents\\Projects\\mpointers\\memory_manager\\garbage_collector.cpp",
+  "output": "CMakeFiles\\server_app.dir\\memory_manager\\garbage_collector.cpp.obj"
+},
+{
+  "directory": "C:/Users/roarb/Documents/Projects/mpointers/cmake-build-debug",
+  "command": "C:\\PROGRA~1\\JETBRA~1\\CLION2~1.4\\bin\\mingw\\bin\\G__~1.EXE -g -std=gnu++20 -fdiagnostics-color=always -o CMakeFiles\\server_app.dir\\memory_manager\\socket_server.cpp.obj -c C:\\Users\\roarb\\Documents\\Projects\\mpointers\\memory_manager\\socket_server.cpp",
+  "file": "C:\\Users\\roarb\\Documents\\Projects\\mpointers\\memory_manager\\socket_server.cpp",
+  "output": "CMakeFiles\\server_app.dir\\memory_manager\\socket_server.cpp.obj"
+},
+{
+  "directory": "C:/Users/roarb/Documents/Projects/mpointers/cmake-build-debug",
+  "command": "C:\\PROGRA~1\\JETBRA~1\\CLION2~1.4\\bin\\mingw\\bin\\G__~1.EXE -g -std=gnu++20 -fdiagnostics-color=always -o CMakeFiles\\client_app.dir\\terminal_app\\client_app.cpp.obj -c C:\\Users\\roarb\\Documents\\Projects\\mpointers\\terminal_app\\client_app.cpp",
+  "file": "C:\\Users\\roarb\\Documents\\Projects\\mpointers\\terminal_app\\client_app.cpp",
+  "output": "CMakeFiles\\client_app.dir\\terminal_app\\client_app.cpp.obj"
+},
+{
+  "directory": "C:/Users/roarb/Documents/Projects/mpointers/cmake-build-debug",
+  "command": "C:\\PROGRA~1\\JETBRA~1\\CLION2~1.4\\bin\\mingw\\bin\\G__~1.EXE -g -std=gnu++20 -fdiagnostics-color=always -o CMakeFiles\\mpointers.dir\\main.cpp.obj -c C:\\Users\\roarb\\Documents\\Projects\\mpointers\\main.cpp",
+  "file": "C:\\Users\\roarb\\Documents\\Projects\\mpointers\\main.cpp",
+  "output": "CMakeFiles\\mpointers.dir\\main.cpp.obj"
+}
+]

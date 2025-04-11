@@ -9,6 +9,7 @@
 #include <sstream>
 #include <iostream>
 #include <cstring>
+#include <algorithm> // Para std::sort
 
 MemoryManager::MemoryManager(size_t size_mb, const std::string& dump_folder)
     : memory_size_(size_mb * 1024 * 1024), dump_folder_(dump_folder) {
@@ -183,17 +184,37 @@ bool MemoryManager::decreaseRefCount(int id) {
 }
 
 void MemoryManager::compactMemory() {
+    std::lock_guard<std::mutex> lock(memory_mutex_);
     std::cout << "Starting memory defragmentation..." << std::endl;
 
-    // First, remove all blocks with in_use=false
-    for (auto it = blocks_.begin(); it != blocks_.end();) {
-        if (!it->second.in_use) {
-            it = blocks_.erase(it);
-        } else {
-            ++it;
+    // Verificar si hay bloques que necesitan liberarse
+    bool freeBlocksExist = false;
+    for (const auto& [id, block] : blocks_) {
+        if (!block.in_use) {
+            freeBlocksExist = true;
+            break;
         }
     }
 
+    if (!freeBlocksExist) {
+        std::cout << "No free blocks to remove, checking for fragmentation..." << std::endl;
+    } else {
+        std::cout << "Removing free blocks..." << std::endl;
+        // First, remove all blocks with in_use=false
+        for (auto it = blocks_.begin(); it != blocks_.end();) {
+            if (!it->second.in_use) {
+                std::cout << "Removing block with ID: " << it->first << std::endl;
+                it = blocks_.erase(it);
+            } else {
+                ++it;
+            }
+        }
+    }
+
+    // Verificar si hay fragmentación
+    bool fragmented = false;
+    size_t last_block_end = 0;
+    
     // Sort blocks by offset
     std::vector<std::pair<int, MemoryBlock>> sorted_blocks;
     for (const auto& [id, block] : blocks_) {
@@ -204,11 +225,35 @@ void MemoryManager::compactMemory() {
               [](const auto& a, const auto& b) {
                   return a.second.offset < b.second.offset;
               });
+    
+    // Verificar si hay espacios entre bloques
+    for (size_t i = 0; i < sorted_blocks.size(); i++) {
+        const auto& [id, block] = sorted_blocks[i];
+        if (block.offset > last_block_end) {
+            std::cout << "Found gap between blocks: " 
+                      << last_block_end << " to " << block.offset 
+                      << " (size: " << block.offset - last_block_end << " bytes)" << std::endl;
+            fragmented = true;
+        }
+        last_block_end = block.offset + block.size;
+    }
+    
+    if (!fragmented) {
+        std::cout << "Memory is not fragmented, no compaction needed" << std::endl;
+        return;
+    }
+
+    std::cout << "Compacting memory blocks..." << std::endl;
 
     // Compact blocks
     size_t current_offset = 0;
     for (auto& [id, block] : sorted_blocks) {
         if (block.offset > current_offset) {
+            std::cout << "Moving block ID " << id 
+                      << " from offset " << block.offset 
+                      << " to " << current_offset 
+                      << " (size: " << block.size << " bytes)" << std::endl;
+            
             // Move block data to new offset
             memmove(memory_pool_ + current_offset,
                     memory_pool_ + block.offset, block.size);
@@ -220,7 +265,17 @@ void MemoryManager::compactMemory() {
         current_offset += block.size;
     }
 
+    // Calcular memoria liberada
+    size_t free_memory = memory_size_ - current_offset;
+    double free_percentage = (static_cast<double>(free_memory) / memory_size_) * 100.0;
+    
     std::cout << "Memory defragmentation complete" << std::endl;
+    std::cout << "Total memory: " << memory_size_ << " bytes" << std::endl;
+    std::cout << "Used memory: " << current_offset << " bytes ("
+              << (100.0 - free_percentage) << "%)" << std::endl;
+    std::cout << "Free memory: " << free_memory << " bytes ("
+              << free_percentage << "%)" << std::endl;
+              
     dumpMemoryState();
 }
 

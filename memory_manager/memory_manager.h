@@ -13,6 +13,9 @@
 #include<thread>
 #include<string>
 
+class GarbageCollector; // Declaración adelantada
+class SocketServer;     // Declaración adelantada
+
 class MemoryManager {
 public:
     MemoryManager(size_t size_mb, const std::string& dump_folder);
@@ -26,6 +29,10 @@ public:
 
     void startGarbageCollector();
     void dumpMemoryState();
+
+    // Hacemos amigos a GarbageCollector y SocketServer para que puedan acceder a métodos/atributos privados
+    friend class GarbageCollector;
+    friend class SocketServer;
 
 private:
     char* memory_pool_;             // Single memory allocation

@@ -11,7 +11,7 @@
 # =============================================================================
 
 # =============================================================================
-# Project: MemoryManager
+# Project: mpointers
 # Configurations: Debug
 # =============================================================================
 
@@ -41,55 +41,99 @@ include CMakeFiles/rules.ninja
 
 cmake_ninja_workdir = C$:/Users/roarb/Documents/Projects/mpointers/cmake-build-debug/
 # =============================================================================
+# Object build statements for STATIC_LIBRARY target protocol
+
+
+#############################################
+# Order-only phony target for protocol
+
+build cmake_object_order_depends_target_protocol: phony || .
+
+build CMakeFiles/protocol.dir/protocol/message.cpp.obj: CXX_COMPILER__protocol_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/protocol/message.cpp || cmake_object_order_depends_target_protocol
+  DEP_FILE = CMakeFiles\protocol.dir\protocol\message.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\protocol.dir
+  OBJECT_FILE_DIR = CMakeFiles\protocol.dir\protocol
+
+
+# =============================================================================
+# Link build statements for STATIC_LIBRARY target protocol
+
+
+#############################################
+# Link the static library libprotocol.a
+
+build libprotocol.a: CXX_STATIC_LIBRARY_LINKER__protocol_Debug CMakeFiles/protocol.dir/protocol/message.cpp.obj
+  LANGUAGE_COMPILE_FLAGS = -g
+  OBJECT_DIR = CMakeFiles\protocol.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_FILE = libprotocol.a
+  TARGET_PDB = protocol.a.dbg
+
+# =============================================================================
+# Object build statements for STATIC_LIBRARY target socket_client
+
+
+#############################################
+# Order-only phony target for socket_client
+
+build cmake_object_order_depends_target_socket_client: phony || cmake_object_order_depends_target_protocol
+
+build CMakeFiles/socket_client.dir/mpointer/socket_client.cpp.obj: CXX_COMPILER__socket_client_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/mpointer/socket_client.cpp || cmake_object_order_depends_target_socket_client
+  DEP_FILE = CMakeFiles\socket_client.dir\mpointer\socket_client.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\socket_client.dir
+  OBJECT_FILE_DIR = CMakeFiles\socket_client.dir\mpointer
+
+
+# =============================================================================
+# Link build statements for STATIC_LIBRARY target socket_client
+
+
+#############################################
+# Link the static library libsocket_client.a
+
+build libsocket_client.a: CXX_STATIC_LIBRARY_LINKER__socket_client_Debug CMakeFiles/socket_client.dir/mpointer/socket_client.cpp.obj || libprotocol.a
+  LANGUAGE_COMPILE_FLAGS = -g
+  OBJECT_DIR = CMakeFiles\socket_client.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_FILE = libsocket_client.a
+  TARGET_PDB = socket_client.a.dbg
+
+# =============================================================================
 # Object build statements for EXECUTABLE target memory_manager
 
 
 #############################################
 # Order-only phony target for memory_manager
 
-build cmake_object_order_depends_target_memory_manager: phony || .
+build cmake_object_order_depends_target_memory_manager: phony || cmake_object_order_depends_target_protocol
 
 build CMakeFiles/memory_manager.dir/memory_manager/main.cpp.obj: CXX_COMPILER__memory_manager_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/memory_manager/main.cpp || cmake_object_order_depends_target_memory_manager
   DEP_FILE = CMakeFiles\memory_manager.dir\memory_manager\main.cpp.obj.d
-  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/roarb/Documents/Projects/mpointers
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\memory_manager.dir
   OBJECT_FILE_DIR = CMakeFiles\memory_manager.dir\memory_manager
 
 build CMakeFiles/memory_manager.dir/memory_manager/memory_manager.cpp.obj: CXX_COMPILER__memory_manager_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/memory_manager/memory_manager.cpp || cmake_object_order_depends_target_memory_manager
   DEP_FILE = CMakeFiles\memory_manager.dir\memory_manager\memory_manager.cpp.obj.d
-  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/roarb/Documents/Projects/mpointers
-  OBJECT_DIR = CMakeFiles\memory_manager.dir
-  OBJECT_FILE_DIR = CMakeFiles\memory_manager.dir\memory_manager
-
-build CMakeFiles/memory_manager.dir/memory_manager/socket_server.cpp.obj: CXX_COMPILER__memory_manager_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/memory_manager/socket_server.cpp || cmake_object_order_depends_target_memory_manager
-  DEP_FILE = CMakeFiles\memory_manager.dir\memory_manager\socket_server.cpp.obj.d
-  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/roarb/Documents/Projects/mpointers
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\memory_manager.dir
   OBJECT_FILE_DIR = CMakeFiles\memory_manager.dir\memory_manager
 
 build CMakeFiles/memory_manager.dir/memory_manager/garbage_collector.cpp.obj: CXX_COMPILER__memory_manager_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/memory_manager/garbage_collector.cpp || cmake_object_order_depends_target_memory_manager
   DEP_FILE = CMakeFiles\memory_manager.dir\memory_manager\garbage_collector.cpp.obj.d
-  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/roarb/Documents/Projects/mpointers
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\memory_manager.dir
   OBJECT_FILE_DIR = CMakeFiles\memory_manager.dir\memory_manager
 
-build CMakeFiles/memory_manager.dir/protocol/message.cpp.obj: CXX_COMPILER__memory_manager_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/protocol/message.cpp || cmake_object_order_depends_target_memory_manager
-  DEP_FILE = CMakeFiles\memory_manager.dir\protocol\message.cpp.obj.d
-  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/roarb/Documents/Projects/mpointers
+build CMakeFiles/memory_manager.dir/memory_manager/socket_server.cpp.obj: CXX_COMPILER__memory_manager_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/memory_manager/socket_server.cpp || cmake_object_order_depends_target_memory_manager
+  DEP_FILE = CMakeFiles\memory_manager.dir\memory_manager\socket_server.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\memory_manager.dir
-  OBJECT_FILE_DIR = CMakeFiles\memory_manager.dir\protocol
-
-build CMakeFiles/memory_manager.dir/tests/mponter_test.cpp.obj: CXX_COMPILER__memory_manager_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/tests/mponter_test.cpp || cmake_object_order_depends_target_memory_manager
-  DEP_FILE = CMakeFiles\memory_manager.dir\tests\mponter_test.cpp.obj.d
-  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/roarb/Documents/Projects/mpointers
-  OBJECT_DIR = CMakeFiles\memory_manager.dir
-  OBJECT_FILE_DIR = CMakeFiles\memory_manager.dir\tests
+  OBJECT_FILE_DIR = CMakeFiles\memory_manager.dir\memory_manager
 
 
 # =============================================================================
@@ -99,15 +143,222 @@ build CMakeFiles/memory_manager.dir/tests/mponter_test.cpp.obj: CXX_COMPILER__me
 #############################################
 # Link the executable memory_manager.exe
 
-build memory_manager.exe: CXX_EXECUTABLE_LINKER__memory_manager_Debug CMakeFiles/memory_manager.dir/memory_manager/main.cpp.obj CMakeFiles/memory_manager.dir/memory_manager/memory_manager.cpp.obj CMakeFiles/memory_manager.dir/memory_manager/socket_server.cpp.obj CMakeFiles/memory_manager.dir/memory_manager/garbage_collector.cpp.obj CMakeFiles/memory_manager.dir/protocol/message.cpp.obj CMakeFiles/memory_manager.dir/tests/mponter_test.cpp.obj
+build memory_manager.exe: CXX_EXECUTABLE_LINKER__memory_manager_Debug CMakeFiles/memory_manager.dir/memory_manager/main.cpp.obj CMakeFiles/memory_manager.dir/memory_manager/memory_manager.cpp.obj CMakeFiles/memory_manager.dir/memory_manager/garbage_collector.cpp.obj CMakeFiles/memory_manager.dir/memory_manager/socket_server.cpp.obj | libprotocol.a || libprotocol.a
   FLAGS = -g
-  LINK_LIBRARIES = -lws2_32  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+  LINK_LIBRARIES = libprotocol.a  -lwsock32  -lws2_32  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\memory_manager.dir
   POST_BUILD = cd .
   PRE_LINK = cd .
   TARGET_FILE = memory_manager.exe
   TARGET_IMPLIB = libmemory_manager.dll.a
   TARGET_PDB = memory_manager.exe.dbg
+
+# =============================================================================
+# Object build statements for EXECUTABLE target examples
+
+
+#############################################
+# Order-only phony target for examples
+
+build cmake_object_order_depends_target_examples: phony || cmake_object_order_depends_target_protocol cmake_object_order_depends_target_socket_client
+
+build CMakeFiles/examples.dir/examples/main.cpp.obj: CXX_COMPILER__examples_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/examples/main.cpp || cmake_object_order_depends_target_examples
+  DEP_FILE = CMakeFiles\examples.dir\examples\main.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\examples.dir
+  OBJECT_FILE_DIR = CMakeFiles\examples.dir\examples
+
+build CMakeFiles/examples.dir/examples/linked_list.cpp.obj: CXX_COMPILER__examples_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/examples/linked_list.cpp || cmake_object_order_depends_target_examples
+  DEP_FILE = CMakeFiles\examples.dir\examples\linked_list.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\examples.dir
+  OBJECT_FILE_DIR = CMakeFiles\examples.dir\examples
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target examples
+
+
+#############################################
+# Link the executable examples.exe
+
+build examples.exe: CXX_EXECUTABLE_LINKER__examples_Debug CMakeFiles/examples.dir/examples/main.cpp.obj CMakeFiles/examples.dir/examples/linked_list.cpp.obj | libsocket_client.a libprotocol.a || libprotocol.a libsocket_client.a
+  FLAGS = -g
+  LINK_LIBRARIES = libsocket_client.a  libprotocol.a  -lwsock32  -lws2_32  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+  OBJECT_DIR = CMakeFiles\examples.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_FILE = examples.exe
+  TARGET_IMPLIB = libexamples.dll.a
+  TARGET_PDB = examples.exe.dbg
+
+# =============================================================================
+# Object build statements for EXECUTABLE target mpointer_test
+
+
+#############################################
+# Order-only phony target for mpointer_test
+
+build cmake_object_order_depends_target_mpointer_test: phony || cmake_object_order_depends_target_protocol cmake_object_order_depends_target_socket_client
+
+build CMakeFiles/mpointer_test.dir/tests/mpointer_test.cpp.obj: CXX_COMPILER__mpointer_test_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/tests/mpointer_test.cpp || cmake_object_order_depends_target_mpointer_test
+  DEP_FILE = CMakeFiles\mpointer_test.dir\tests\mpointer_test.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\mpointer_test.dir
+  OBJECT_FILE_DIR = CMakeFiles\mpointer_test.dir\tests
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target mpointer_test
+
+
+#############################################
+# Link the executable mpointer_test.exe
+
+build mpointer_test.exe: CXX_EXECUTABLE_LINKER__mpointer_test_Debug CMakeFiles/mpointer_test.dir/tests/mpointer_test.cpp.obj | libsocket_client.a libprotocol.a || libprotocol.a libsocket_client.a
+  FLAGS = -g
+  LINK_LIBRARIES = libsocket_client.a  libprotocol.a  -lwsock32  -lws2_32  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+  OBJECT_DIR = CMakeFiles\mpointer_test.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_FILE = mpointer_test.exe
+  TARGET_IMPLIB = libmpointer_test.dll.a
+  TARGET_PDB = mpointer_test.exe.dbg
+
+# =============================================================================
+# Object build statements for EXECUTABLE target server_app
+
+
+#############################################
+# Order-only phony target for server_app
+
+build cmake_object_order_depends_target_server_app: phony || cmake_object_order_depends_target_protocol
+
+build CMakeFiles/server_app.dir/terminal_app/server_app.cpp.obj: CXX_COMPILER__server_app_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/terminal_app/server_app.cpp || cmake_object_order_depends_target_server_app
+  DEP_FILE = CMakeFiles\server_app.dir\terminal_app\server_app.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\server_app.dir
+  OBJECT_FILE_DIR = CMakeFiles\server_app.dir\terminal_app
+
+build CMakeFiles/server_app.dir/memory_manager/memory_manager.cpp.obj: CXX_COMPILER__server_app_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/memory_manager/memory_manager.cpp || cmake_object_order_depends_target_server_app
+  DEP_FILE = CMakeFiles\server_app.dir\memory_manager\memory_manager.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\server_app.dir
+  OBJECT_FILE_DIR = CMakeFiles\server_app.dir\memory_manager
+
+build CMakeFiles/server_app.dir/memory_manager/garbage_collector.cpp.obj: CXX_COMPILER__server_app_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/memory_manager/garbage_collector.cpp || cmake_object_order_depends_target_server_app
+  DEP_FILE = CMakeFiles\server_app.dir\memory_manager\garbage_collector.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\server_app.dir
+  OBJECT_FILE_DIR = CMakeFiles\server_app.dir\memory_manager
+
+build CMakeFiles/server_app.dir/memory_manager/socket_server.cpp.obj: CXX_COMPILER__server_app_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/memory_manager/socket_server.cpp || cmake_object_order_depends_target_server_app
+  DEP_FILE = CMakeFiles\server_app.dir\memory_manager\socket_server.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\server_app.dir
+  OBJECT_FILE_DIR = CMakeFiles\server_app.dir\memory_manager
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target server_app
+
+
+#############################################
+# Link the executable server_app.exe
+
+build server_app.exe: CXX_EXECUTABLE_LINKER__server_app_Debug CMakeFiles/server_app.dir/terminal_app/server_app.cpp.obj CMakeFiles/server_app.dir/memory_manager/memory_manager.cpp.obj CMakeFiles/server_app.dir/memory_manager/garbage_collector.cpp.obj CMakeFiles/server_app.dir/memory_manager/socket_server.cpp.obj | libprotocol.a || libprotocol.a
+  FLAGS = -g
+  LINK_LIBRARIES = libprotocol.a  -lwsock32  -lws2_32  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+  OBJECT_DIR = CMakeFiles\server_app.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_FILE = server_app.exe
+  TARGET_IMPLIB = libserver_app.dll.a
+  TARGET_PDB = server_app.exe.dbg
+
+# =============================================================================
+# Object build statements for EXECUTABLE target client_app
+
+
+#############################################
+# Order-only phony target for client_app
+
+build cmake_object_order_depends_target_client_app: phony || cmake_object_order_depends_target_protocol cmake_object_order_depends_target_socket_client
+
+build CMakeFiles/client_app.dir/terminal_app/client_app.cpp.obj: CXX_COMPILER__client_app_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/terminal_app/client_app.cpp || cmake_object_order_depends_target_client_app
+  DEP_FILE = CMakeFiles\client_app.dir\terminal_app\client_app.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\client_app.dir
+  OBJECT_FILE_DIR = CMakeFiles\client_app.dir\terminal_app
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target client_app
+
+
+#############################################
+# Link the executable client_app.exe
+
+build client_app.exe: CXX_EXECUTABLE_LINKER__client_app_Debug CMakeFiles/client_app.dir/terminal_app/client_app.cpp.obj | libsocket_client.a libprotocol.a || libprotocol.a libsocket_client.a
+  FLAGS = -g
+  LINK_LIBRARIES = libsocket_client.a  libprotocol.a  -lwsock32  -lws2_32  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+  OBJECT_DIR = CMakeFiles\client_app.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_FILE = client_app.exe
+  TARGET_IMPLIB = libclient_app.dll.a
+  TARGET_PDB = client_app.exe.dbg
+
+# =============================================================================
+# Object build statements for EXECUTABLE target mpointers
+
+
+#############################################
+# Order-only phony target for mpointers
+
+build cmake_object_order_depends_target_mpointers: phony || cmake_object_order_depends_target_protocol cmake_object_order_depends_target_socket_client
+
+build CMakeFiles/mpointers.dir/main.cpp.obj: CXX_COMPILER__mpointers_unscanned_Debug C$:/Users/roarb/Documents/Projects/mpointers/main.cpp || cmake_object_order_depends_target_mpointers
+  DEP_FILE = CMakeFiles\mpointers.dir\main.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\mpointers.dir
+  OBJECT_FILE_DIR = CMakeFiles\mpointers.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target mpointers
+
+
+#############################################
+# Link the executable mpointers.exe
+
+build mpointers.exe: CXX_EXECUTABLE_LINKER__mpointers_Debug CMakeFiles/mpointers.dir/main.cpp.obj | libsocket_client.a libprotocol.a || libprotocol.a libsocket_client.a
+  FLAGS = -g
+  LINK_LIBRARIES = libsocket_client.a  libprotocol.a  -lwsock32  -lws2_32  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+  OBJECT_DIR = CMakeFiles\mpointers.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_FILE = mpointers.exe
+  TARGET_IMPLIB = libmpointers.dll.a
+  TARGET_PDB = mpointers.exe.dbg
+
+
+#############################################
+# Utility command for run_tests
+
+build run_tests: phony CMakeFiles/run_tests mpointer_test.exe
+
+
+#############################################
+# Utility command for test
+
+build CMakeFiles/test.util: CUSTOM_COMMAND
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\roarb\Documents\Projects\mpointers\cmake-build-debug && "C:\Program Files\JetBrains\CLion 2024.3.4\bin\cmake\win\x64\bin\ctest.exe" --force-new-ctest-process "
+  DESC = Running tests...
+  pool = console
+  restat = 1
+
+build test: phony CMakeFiles/test.util
 
 
 #############################################
@@ -132,10 +383,32 @@ build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
 
 build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 
+
+#############################################
+# Custom command for CMakeFiles\run_tests
+
+build CMakeFiles/run_tests | ${cmake_ninja_workdir}CMakeFiles/run_tests: CUSTOM_COMMAND mpointer_test.exe || libprotocol.a libsocket_client.a mpointer_test.exe
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\roarb\Documents\Projects\mpointers\cmake-build-debug && "C:\Program Files\JetBrains\CLion 2024.3.4\bin\cmake\win\x64\bin\ctest.exe" --output-on-failure"
+  DESC = Ejecutando todas las pruebas
+
 # =============================================================================
 # Target aliases.
 
+build client_app: phony client_app.exe
+
+build examples: phony examples.exe
+
 build memory_manager: phony memory_manager.exe
+
+build mpointer_test: phony mpointer_test.exe
+
+build mpointers: phony mpointers.exe
+
+build protocol: phony libprotocol.a
+
+build server_app: phony server_app.exe
+
+build socket_client: phony libsocket_client.a
 
 # =============================================================================
 # Folder targets.
@@ -145,7 +418,7 @@ build memory_manager: phony memory_manager.exe
 #############################################
 # Folder: C:/Users/roarb/Documents/Projects/mpointers/cmake-build-debug
 
-build all: phony memory_manager.exe
+build all: phony libprotocol.a libsocket_client.a memory_manager.exe examples.exe mpointer_test.exe server_app.exe client_app.exe mpointers.exe
 
 # =============================================================================
 # Built-in targets

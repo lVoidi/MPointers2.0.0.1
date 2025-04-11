@@ -66,20 +66,31 @@ public:
             throw std::runtime_error("Intento de dereferencia de un MPointer nulo");
         }
 
-        // Obtener datos del servidor
-        std::vector<char> data = client_->getMemoryBlock(id_);
+        try {
+            // Obtener datos del servidor
+            std::vector<char> data = client_->getMemoryBlock(id_);
 
-        if (data.size() != sizeof(T)) {
-            throw std::runtime_error("Tamaño de datos incorrecto al dereferencia MPointer");
+            // Verificar que tenemos datos suficientes
+            if (data.empty()) {
+                throw std::runtime_error("No se recibieron datos del servidor");
+            }
+
+            if (data.size() < sizeof(T)) {
+                throw std::runtime_error("Tamaño de datos insuficiente: recibido " + 
+                                        std::to_string(data.size()) + " bytes, esperado " + 
+                                        std::to_string(sizeof(T)) + " bytes");
+            }
+
+            // Copiar los datos a un buffer temporal
+            if (!cached_data_) {
+                cached_data_ = std::make_unique<T>();
+            }
+            std::memcpy(cached_data_.get(), data.data(), sizeof(T));
+
+            return *cached_data_;
+        } catch (const std::exception& e) {
+            throw std::runtime_error(std::string("Error al obtener valor: ") + e.what());
         }
-
-        // Copiar los datos a un buffer temporal
-        if (!cached_data_) {
-            cached_data_ = std::make_unique<T>();
-        }
-        std::memcpy(cached_data_.get(), data.data(), sizeof(T));
-
-        return *cached_data_;
     }
 
     // Operador de asignación

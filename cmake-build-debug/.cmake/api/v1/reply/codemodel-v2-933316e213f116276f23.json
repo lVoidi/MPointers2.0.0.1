@@ -1,0 +1,132 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.20"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "mpointers",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "client_app::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-client_app-Debug-dbc0b7b1baca71fefe0c.json",
+					"name" : "client_app",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "examples::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-examples-Debug-4c00531b55a65ab15054.json",
+					"name" : "examples",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "memory_manager::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-memory_manager-Debug-42bd0c4e4f201e63598c.json",
+					"name" : "memory_manager",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mpointer_test::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mpointer_test-Debug-7a3a925675a48a9cc514.json",
+					"name" : "mpointer_test",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mpointers::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mpointers-Debug-0682dca42f35fd1cbbae.json",
+					"name" : "mpointers",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "protocol::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-protocol-Debug-4c5d1451a2017706c086.json",
+					"name" : "protocol",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "run_tests::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-run_tests-Debug-cce8a116d55088f5bdae.json",
+					"name" : "run_tests",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "server_app::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-server_app-Debug-dd18b51b255de6f44d25.json",
+					"name" : "server_app",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "socket_client::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-socket_client-Debug-09e31da0df7ef95e265b.json",
+					"name" : "socket_client",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/roarb/Documents/Projects/mpointers/cmake-build-debug",
+		"source" : "C:/Users/roarb/Documents/Projects/mpointers"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}

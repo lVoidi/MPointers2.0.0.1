@@ -200,14 +200,32 @@ Message SocketServer::processRequest(const Message& request) {
         case MessageType::GET: {
             int id = request.getId();
 
-            // You'll need to implement a method to get the size of a memory block
-            // For now, assuming a placeholder implementation
-            size_t size = 1024; // Placeholder size
-            std::vector<char> result(size);
+            // Primero determinar el tamaño correcto del bloque de memoria
+            size_t blockSize = 0;
+            for (const auto& pair : memory_manager_->blocks_) {
+                if (pair.first == id && pair.second.in_use) {
+                    blockSize = pair.second.size;
+                    break;
+                }
+            }
 
-            bool success = memory_manager_->get(id, result.data(), size);
+            if (blockSize == 0) {
+                // No se encontró el bloque o no está en uso
+                return Message::response(false);
+            }
 
-            return Message::response(success, result);
+            // Ahora reservamos un buffer del tamaño exacto
+            std::vector<char> result(blockSize);
+
+            // Obtener los datos del bloque
+            bool success = memory_manager_->get(id, result.data(), blockSize);
+
+            // Solo usar los bytes exactos en la respuesta
+            if (success) {
+                return Message::response(true, result);
+            } else {
+                return Message::response(false);
+            }
         }
 
         case MessageType::INCREASE_REF_COUNT: {

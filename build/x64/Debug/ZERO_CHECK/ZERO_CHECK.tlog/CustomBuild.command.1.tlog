@@ -1,0 +1,10 @@
+^C:\USERS\ROARB\DOCUMENTS\PROJECTS\MPOINTERS\BUILD\CMAKEFILES\475F689CEA98D0F144751151F4D5454F\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/roarb/Documents/Projects/mpointers -BC:/Users/roarb/Documents/Projects/mpointers/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/roarb/Documents/Projects/mpointers/build/mpointers.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
